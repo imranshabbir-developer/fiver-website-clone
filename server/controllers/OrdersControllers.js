@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 // import Stripe from "stripe";
 
 // const stripe = new Stripe(
-//   "YOUR_STRIPE_SECRET_KEY_HERE"
+//   "YOUR_STRIPE_SECRET_KEY_HERE" // Replace with process.env.STRIPE_SECRET_KEY in production
 // );
 
 export const createOrder = async (req, res, next) => {
@@ -13,16 +13,17 @@ export const createOrder = async (req, res, next) => {
       const gig = await prisma.gigs.findUnique({
         where: { id: parseInt(gigId) },
       });
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: gig?.price * 100,
-        currency: "usd",
-        automatic_payment_methods: {
-          enabled: true,
-        },
-      });
+      // TODO: Uncomment and configure Stripe when ready to use
+      // const paymentIntent = await stripe.paymentIntents.create({
+      //   amount: gig?.price * 100,
+      //   currency: "usd",
+      //   automatic_payment_methods: {
+      //     enabled: true,
+      //   },
+      // });
       await prisma.orders.create({
         data: {
-          paymentIntent: paymentIntent.id,
+          paymentIntent: "payment_intent_id_placeholder", // Replace with paymentIntent.id when Stripe is configured
           price: gig?.price,
           buyer: { connect: { id: req?.userId } },
           gig: { connect: { id: gig?.id } },
