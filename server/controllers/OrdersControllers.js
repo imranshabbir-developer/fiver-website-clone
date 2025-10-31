@@ -29,7 +29,7 @@ export const createOrder = async (req, res, next) => {
         },
       });
       res.status(200).send({
-        clientSecret: paymentIntent.client_secret,
+        // clientSecret: paymentIntent.client_secret,
       });
     } else {
       res.status(400).send("Gig id is required.");
